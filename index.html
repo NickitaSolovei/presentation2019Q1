@@ -1,0 +1,224 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>presentation</title>
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/black.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<h1>Font Loading Strategies</h1>
+				</section>
+
+				<section>
+					<section>
+						<h2>Simple @font-face</h2>
+						<p>Throw a naked @font-face block on your page and hope for the best. </p>
+					</section>
+					<section>
+						<h4>Pros</h4>
+						<ul>
+							<li>Very simple</li>
+							<li>Very future friendly</li>
+							<li>Good rendering performance in Internet Explorer and Edge</li>
+							<li>Does not require modification of the fonts </li>
+						</ul>
+					</section>
+					<section>
+						<h4>Cons</h4>
+						<ul>
+							<li>Bad rendering performance everywhere else</li>
+							<li>Not very robust, yet</li>
+							<li>No easy way to group requests or repaints together</li>
+						</ul>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h2>font-display</h2>
+						<p>Add a new font-display: swap descriptor to your @font-face block to opt-in to FOUT on browsers that support it.
+							 Optionally, font-display: fallback or font-display: optional can be used if you consider web fonts to be unnecessary to the design.</p>
+					</section>
+					<section>
+						<h4>Pros</h4>
+						<ul>
+							<li>Very simple</li>
+							<li>Good rendering performance</li>
+							<li>Super future friendly</li>
+							<li>Very robust</li>
+							<li>Does not require modification of the fonts</li>
+						</ul>
+					</section>
+					<section>
+						<h4>Cons</h4>
+						<ul>
+							<li>Only available on Chrome (version 60+ on Desktop and Android)</li>
+							<li>Limited flexibility</li>
+							<li>Hosting</li>
+						</ul>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h2>Preload</h2>
+						<p>Add &lt;link rel="preload" href="font.woff2" as="font" type="font/woff2" crossorigin&gt; to fetch your font sooner.
+							 Pairs nicely with an unceremonious @font-face block and feel free to also throw in the font-display descriptor as well for bonus points.</p>
+					</section>
+					<section>
+						<h4>Pros</h4>
+						<ul>
+							<li>Super easy to implement, one &lt;link&gt; and you’re off</li>
+							<li>Better rendering performance than a @font-face block</li>
+							<li>Future friendly if you use the type attribute to specify the font format</li>
+							<li>Does not require modification of the fonts</li>
+						</ul>
+					</section>
+					<section>
+						<h4>Cons</h4>
+						<ul>
+							<li>Scalability</li>
+							<li>Limited browser support</li>
+							<li>Flexibility</li>
+							<li>You probably wouldn’t be able to use this with a third party host</li>
+						</ul>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h2>Inline Data URI</h2>
+						<p>There are typically two kinds of inlining covered by this method: in a blocking &lt;link rel="stylesheet"&gt; request or in a &lt;style&gt; element in the server rendered markup</p>
+					</section>
+					<section>
+						<h4>Pros</h4>
+						<ul>
+							<li>Seemingly great rendering performance</li>
+							<li>Flexibility</li>
+							<li>Robustness</li>
+						</ul>
+					</section>
+					<section>
+						<h4>Cons</h4>
+						<ul>
+							<li>A catch with rendering performance</li>
+							<li>Browser support</li>
+							<li>Bad scalability</li>
+							<li>Self hosting</li>
+						</ul>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h2>Asynchronous Data URI Stylesheetd</h2>
+						<p>Use a tool like <i>loadCSS</i> to fetch a stylesheet with all of the fonts embedded as Data URIs</p>
+					</section>
+					<section>
+						<h4>Pros</h4>
+						<ul>
+							<li>Rendering performance</li>
+							<li>Flexibility</li>
+							<li>Ease: Does not require any additional CSS changes to use</li>
+							<li>Robust: If the asynchronous request fails, fallback text continues to be shown</li>
+						</ul>
+					</section>
+					<section>
+						<h4>Cons</h4>
+						<ul>
+							<li>Rendering performance</li>
+							<li>Flexibility and Scalability</li>
+							<li>Not maintenance friendly</li>
+							<li>Browser support</li>
+							<li>Self Hosting</li>
+						</ul>
+					</section>
+				</section>
+
+				<!--<section>
+					<section>
+						<h2>FOUT with a Class</h2>
+						<p>Use the CSS Font Loading API with a polyfill to detect when a specific font has loaded and only apply
+							 that web font in your CSS after it has loaded successfully.</p>
+					</section>
+					<section>
+						<h4>Pros</h4>
+						<ul>
+							<li>Rendering performance</li>
+							<li>Flexibility</li>
+							<li>Scalability</li>
+							<li>Robust</li>
+							<li>Hosting</li>
+							<li>Great browser support</li>
+							<li>Future friendly</li>
+							<li>Does not require modification of the fonts </li>
+						</ul>
+					</section>
+					<section>
+						<h4>Cons</h4>
+						<ul>
+							<li>Requires strict maintenance/control of your CSS</li>
+							<li>Typically requires you to hard code which web fonts you want to load on the page</li>
+						</ul>
+					</section>
+				</section>-->
+
+
+
+				<section>
+					<section>
+						<h2>Don’t use Web Fonts</h2>
+						<p>It isn’t technically a font loading strategy. But it’s better than using web fonts incorrectly.</p>
+						<img src=".//img/super1.jpg" height=300px>
+					</section>
+					<section>
+						<h4>Pros</h4>
+						<ul>
+							<li>Not sure it could be simpler: just use font-family without @font-face</li>
+							<li>Near instant rendering performance</li>
+						</ul>
+					</section>
+					<section>
+						<h4>Cons</h4>
+						<ul>
+							<li>Limited availability</li>
+						</ul>
+					</section>
+				</section>
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+			Reveal.initialize({
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+		</script>
+	</body>
+</html>
